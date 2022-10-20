@@ -8,6 +8,8 @@ disco-diffusion/
 guided-diffusion/
 AdaBins/
 pretrained/
+images_out/
+pytorch3d-lite/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
