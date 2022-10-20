@@ -1,6 +1,6 @@
 # Pixel Art Diffusion
 models/
-outputs/
+outputs/*
 !outputs/.here
 CLIP/
 MiDaS/
