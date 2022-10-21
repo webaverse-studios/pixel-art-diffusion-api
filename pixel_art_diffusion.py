@@ -1,3 +1,6 @@
+from pathlib import Path
+import jsonpickle
+
 # Pixel Art Diffusion v3.1 - ported from notebook
 def generate(input_prompt, input_steps=250, input_seed=42):
   import subprocess
@@ -239,7 +242,7 @@ def generate(input_prompt, input_steps=250, input_seed=42):
   from skimage import exposure
 
   # Set filename at beginning of code
-  OUTPUT_FILENAME = filename = datetime.now().strftime("%Y%m%d-%H%M%S") + "_" + str(random.randint(1000, 9999)) + ".png"
+  OUTPUT_FILENAME = datetime.now().strftime("%Y%m%d-%H%M%S") + "_" + str(random.randint(1000, 9999))
   
   # %%
   #@title ### 1.4 Define Midas functions
@@ -1229,8 +1232,9 @@ def generate(input_prompt, input_steps=250, input_seed=42):
                           #clamp values to between 0 and 1
                           image = TF.to_pil_image(image.add(1).div(2).clamp(0, 1))
                       if j % args.display_rate == 0 or cur_t == -1:
+
 						# set filename to timestamp plus random number to avoid overwriting
-                        image.save(os.path.join('outputs', OUTPUT_FILENAME))
+                        image.save(os.path.join('outputs', OUTPUT_FILENAME + ".png"))
                         #display.clear_output(wait=True)
                         #display.display(display.Image('progress.png'))
                         #display histogram csa
@@ -2658,8 +2662,15 @@ def generate(input_prompt, input_steps=250, input_seed=42):
       else:
           print("The video is ready and saved to the images folder")
   
-  print(f"Saved to {OUTPUT_FILENAME}")
-  return OUTPUT_FILENAME
+  # Save metadata
+  # touch file with pathlib
+  filepath = Path(os.path.join("outputs", OUTPUT_FILENAME + "_meta.json"))
+  filepath.touch(exist_ok=True)
+  with open(filepath, "w+") as outfile:
+    outfile.write(jsonpickle.encode(args))
+
+  print(f"Saved to {OUTPUT_FILENAME + '.png'}")
+  return OUTPUT_FILENAME + '.png'
       # if view_video_in_cell:
       #     mp4 = open(filepath,'rb').read()
       #     data_url = "data:video/mp4;base64," + b64encode(mp4).decode()
