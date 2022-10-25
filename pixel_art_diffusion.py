@@ -1,5 +1,9 @@
 from pathlib import Path
 import jsonpickle
+import os
+
+if not os.path.exists("outputs/"):
+    os.mkdir("outputs/")
 
 # Pixel Art Diffusion v3.1 - ported from notebook
 def generate(input_prompt, input_steps=250, input_seed=42):
